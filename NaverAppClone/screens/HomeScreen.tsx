@@ -1,7 +1,38 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
-import {Text} from 'react-native';
-const HomeScreen = () => {
-  return <Text>HOME</Text>;
+import {StyleSheet, Text} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import WebView from 'react-native-webview';
+import {RootStackParamList, RouteNames} from '../routes';
+
+const styles = StyleSheet.create({
+  safearea: {flex: 1},
+});
+type Props = NativeStackScreenProps<RootStackParamList>;
+const HomeScreen = ({navigation}: Props) => {
+  return (
+    <SafeAreaView style={styles.safearea}>
+      <WebView
+        source={{uri: 'https://m.naver.com'}}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        onShouldStartLoadWithRequest={request => {
+          console.log(request);
+          if (
+            request.url.startsWith('https://m.naver.com') ||
+            request.mainDocumentURL?.startsWith('https://m.naver.com')
+          ) {
+            return true;
+          }
+          if (request.url !== null && request.url.startsWith('https://')) {
+            navigation.navigate(RouteNames.BROWSER, {initialUrl: request.url});
+            return false;
+          }
+          return true;
+        }}
+      />
+    </SafeAreaView>
+  );
 };
 
 export default HomeScreen;

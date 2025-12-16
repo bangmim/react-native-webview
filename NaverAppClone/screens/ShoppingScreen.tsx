@@ -1,10 +1,20 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-const ShoppingScreen = () => {
+import {RootStackParamList, RouteNames} from '../routes';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+type Props = NativeStackScreenProps<RootStackParamList>;
+
+const ShoppingScreen = ({navigation}: Props) => {
   return (
     <View>
       <Text>Shopping </Text>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(RouteNames.BROWSER, {
+            initialUrl: 'https://m.naver.com',
+          })
+        }>
         <Text>Go To Browser</Text>
       </TouchableOpacity>
     </View>
